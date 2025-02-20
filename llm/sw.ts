@@ -1,43 +1,51 @@
-// sw.ts
-import { ServiceWorkerMLCEngineHandler } from '@mlc-ai/web-llm';
+import { ServiceWorkerMLCEngineHandler } from "@mlc-ai/web-llm";
 
 let handler: ServiceWorkerMLCEngineHandler;
 
-self.addEventListener('activate', function (event) {
+self.addEventListener("activate", function (event) {
   handler = new ServiceWorkerMLCEngineHandler();
-  console.log('Service Worker is ready');
+  console.log("Web-LLM Service Worker Activated");
 });
+// // sw.ts
+// import { ServiceWorkerMLCEngineHandler } from '@mlc-ai/web-llm';
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(self.skipWaiting());
-});
+// let handler: ServiceWorkerMLCEngineHandler;
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
-});
+// self.addEventListener('activate', function (event) {
+//   handler = new ServiceWorkerMLCEngineHandler();
+//   console.log('Service Worker is ready');
+// });
 
-self.addEventListener('message', (event) => {
-  saveMessage(event.data);
-});
+// self.addEventListener('install', (event) => {
+//   event.waitUntil(self.skipWaiting());
+// });
 
-function saveMessage(message) {
-  const request = indexedDB.open('ChatDB', 1);
+// self.addEventListener('activate', (event) => {
+//   event.waitUntil(self.clients.claim());
+// });
 
-  request.onupgradeneeded = (event) => {
-    const db = event.target.result;
-    if (!db.objectStoreNames.contains('messages')) {
-      db.createObjectStore('messages', { autoIncrement: true });
-    }
-  };
+// self.addEventListener('message', (event) => {
+//   saveMessage(event.data);
+// });
 
-  request.onsuccess = (event) => {
-    const db = event.target.result;
-    const tx = db.transaction('messages', 'readwrite');
-    const store = tx.objectStore('messages');
-    store.add({ text: message, timestamp: Date.now() });
-  };
+// function saveMessage(message) {
+//   const request = indexedDB.open('ChatDB', 1);
 
-  request.onerror = (event) => {
-    console.error('IndexedDB error:', event.target.error);
-  };
-}
+//   request.onupgradeneeded = (event) => {
+//     const db = event.target.result;
+//     if (!db.objectStoreNames.contains('messages')) {
+//       db.createObjectStore('messages', { autoIncrement: true });
+//     }
+//   };
+
+//   request.onsuccess = (event) => {
+//     const db = event.target.result;
+//     const tx = db.transaction('messages', 'readwrite');
+//     const store = tx.objectStore('messages');
+//     store.add({ text: message, timestamp: Date.now() });
+//   };
+
+//   request.onerror = (event) => {
+//     console.error('IndexedDB error:', event.target.error);
+//   };
+// }

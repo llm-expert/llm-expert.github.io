@@ -8,11 +8,17 @@
   <link rel="canonical" href="https://https://llm-expert.github.io/llm" />
   <link rel="manifest" href="/llm/manifest.json">
   <script>
+    import { MLCEngineInterface, CreateServiceWorkerMLCEngine } from "@mlc-ai/web-llm";
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/llm/sw.js')
-        .then(reg => console.log('Service Worker registered!', reg))
-        .catch(err => console.error('Service Worker registration failed:', err));
+      navigator.serviceWorker.register(new URL("sw.ts", import.meta.url), { type: 'module' }).then(reg => {
+        console.log("Service Worker registered successfully");
+      }).catch(err => console.error("Service Worker registration failed", err));
     }
+    const engine: MLCEngineInterface =
+      await CreateServiceWorkerMLCEngine(
+        selectedModel,
+        { initProgressCallback }, // engineConfig
+      );
   </script>
   <style>
     body {

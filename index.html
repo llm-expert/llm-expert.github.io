@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLLM Chat</title>
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker registered!', reg))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    #chatbox {
+      width: 300px;
+      height: 300px;
+      border: 1px solid #ccc;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+
+    input,
+    button {
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="chatbox"></div>
+  <input type="text" id="message" placeholder="Type a message">
+  <button onclick="sendMessage()">Send</button>
+
+  <script>
+    function sendMessage() {
+      const msg = document.getElementById('message').value;
+      if (msg.trim()) {
+        navigator.serviceWorker.controller.postMessage(msg);
+        document.getElementById('message').value = '';
+      }
+    }
+  </script>
+</body>
+
+</html>
